@@ -1,0 +1,23 @@
+[functions]
+  external_node_modules = ["express"]
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/api-docs/swagger-ui.css"
+  to = "/src/swagger-ui-dist/swagger-ui.css"
+  status = 200
+[[redirects]]
+  from = "/api-docs/swagger-ui-bundle.js"
+  to = "/src/swagger-ui-dist/swagger-ui-bundle.js"
+  status = 200
+[[redirects]]
+  from = "/api-docs/swagger-ui-standalone-preset.js"
+  to = "/src/swagger-ui-dist/swagger-ui-standalone-preset.js"
+  status = 200
+
+[[redirects]]
+  force = true
+  from = "/*"
+  status = 200
+  to = "/.netlify/functions/index/:splat"
+
