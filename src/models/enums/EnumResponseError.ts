@@ -1,6 +1,13 @@
 enum EnumResponseError {
   Success,
-  UpdateUserNameFail,
+  UpdateFail,
+  NewPasswordsShouldBeSame,
+  PasswordShouldContainAtLeastOneLowerCharacter,
+  PasswordShouldContainAtLeastOneUpperCharacter,
+  PasswordShouldContainAtLeastOneDigitCharacter,
+  PasswordShouldContainAtLeastOneSpecialCharacter,
+  PasswordShouldContainAtLeast8Characters,
+  NewPasswordShouldBeNotSameAsOldPassword,
 }
 
 export default EnumResponseError;

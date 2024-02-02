@@ -8,6 +8,7 @@ import IUser from '../models/IUser';
 import UserService from '../services/UserService';
 import EnumResponseError from '../models/enums/EnumResponseError';
 import ApiResponse from '../models/ApiResponse';
+import IUpdatePasswordRequest, { UpdatePasswordRequest } from '../models/IUpdatePasswordRequest';
 import { IUpdateUserNameRequest } from '../models/IUpdateUserNameRequest';
 
 @Route('user')
@@ -35,6 +36,24 @@ export class UserController extends Controller {
       return new ApiResponse(EnumResponseError.Success);
     }
     this.setStatus(500);
-    return new ApiResponse(EnumResponseError.UpdateUserNameFail);
+    return new ApiResponse(EnumResponseError.UpdateFail);
+  }
+
+  @Post('/update-password')
+  public async updatePassword(@Request() request: express.Request, @Body() body: IUpdatePasswordRequest): Promise<ApiResponse> {
+    const userFromToken = request.user as IUser;
+    const bodyInstance = new UpdatePasswordRequest(body);
+    if (bodyInstance.validatation !== EnumResponseError.Success) {
+      this.setStatus(400);
+      return new ApiResponse(bodyInstance.validatation);
+    }
+
+    const result: boolean = await this.userService.updatePassword(userFromToken.email, body);
+    if (result) {
+      return new ApiResponse(EnumResponseError.Success);
+    }
+
+    this.setStatus(500);
+    return new ApiResponse(EnumResponseError.UpdateFail);
   }
 }

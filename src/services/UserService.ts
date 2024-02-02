@@ -1,4 +1,5 @@
 /* eslint-disable class-methods-use-this */
+import IUpdatePasswordRequest from '../models/IUpdatePasswordRequest';
 import IUser from '../models/IUser';
 
 const USER_LIST = [
@@ -17,6 +18,14 @@ const USER_LIST = [
 ];
 
 export default class UserService {
+  async updatePassword(email: string, body: IUpdatePasswordRequest): Promise<boolean> {
+    if (email === 'string2') {
+      return Promise.resolve(false);
+    }
+
+    return Promise.resolve(true);
+  }
+
   async updateUserName(email: string, name: string): Promise<boolean> {
     if (email === 'string2') {
       return Promise.resolve(false);
