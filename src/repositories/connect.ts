@@ -1,13 +1,21 @@
-import { Pool } from 'pg';
+import { Sequelize } from 'sequelize-typescript';
+import { User } from '../models/IUser';
 
-const pool = new Pool(
-  {
-    user: process.env.PGUSER,
-    host: process.env.PGHOST,
-    database: process.env.PGDATABASE,
-    password: process.env.PGPASSWORD,
-    port: Number(process.env.PGPORT),
-    ssl: true,
+const connection = new Sequelize({
+  dialect: 'postgres',
+  host: process.env.PGHOST,
+  port: Number(process.env.PGPORT),
+  username: process.env.PGUSER,
+  password: process.env.PGPASSWORD,
+  database: process.env.PGDATABASE,
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
   },
-);
-export default pool;
+  logging: false,
+  models: [User],
+});
+
+export default connection;

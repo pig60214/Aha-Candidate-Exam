@@ -11,6 +11,13 @@ import passport from 'passport';
 import { RegisterRoutes } from './routes/routes';
 import swaggerDocument from './routes/swagger.json';
 import googleStrategy from './authStrategy/googleStrategy';
+import connection from './repositories/connect';
+
+try {
+  connection.sync();
+} catch (error) {
+  console.error('DB Connect Fail');
+}
 
 const app: Express = express();
 app.use(express.json());
