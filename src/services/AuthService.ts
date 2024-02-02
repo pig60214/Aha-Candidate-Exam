@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import { ILocalAuthRequest } from '../models/ILocalAuthRequest';
 import IUser from '../models/IUser';
 
@@ -6,6 +7,11 @@ const USER_LIST = [
     email: 'string',
     password: 'string',
     name: 'tttt',
+  },
+  {
+    email: 'string2',
+    password: 'string',
+    name: 'tttt2',
   },
 ];
 

@@ -1,15 +1,9 @@
-interface IApiResponse {
-  errorCode: number,
-  data: any,
-}
+import EnumResponseError from './enums/EnumResponseError';
 
-export default class ApiResponse<T = any> implements IApiResponse {
-  errorCode: number;
+export default class ApiResponse {
+  errorMessage: string;
 
-  data: T;
-
-  constructor(errorCode: number, data: T = null as any) {
-    this.errorCode = errorCode;
-    this.data = data;
+  constructor(errorCode: EnumResponseError) {
+    this.errorMessage = EnumResponseError[errorCode];
   }
 }
