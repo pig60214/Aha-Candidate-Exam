@@ -47,6 +47,6 @@ export class AuthController extends Controller {
   }
 
   private generateJwt(user: IUser): string {
-    return jwt.sign(user, process.env.JWTSECRETKEY || '', { expiresIn: '1h' });
+    return jwt.sign(user, process.env.JWTSECRETKEY || '');
   }
 }
