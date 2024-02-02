@@ -12,6 +12,7 @@ import { RegisterRoutes } from './routes/routes';
 import swaggerDocument from './routes/swagger.json';
 import googleStrategy from './authStrategy/googleStrategy';
 import connection from './repositories/connect';
+import EnumHttpStatus from './models/enums/EnumHttpStatus';
 
 try {
   connection.sync();
@@ -45,14 +46,14 @@ app.use((
 ): ExResponse | void => { /* eslint-disable-line consistent-return */
   // @ts-ignore
   switch (err.status) {
-    case 400: {
-      return res.status(400).json({
-        errorMessage: 'Validation Failed',
+    case EnumHttpStatus.ValidationFailed: {
+      return res.status(EnumHttpStatus.ValidationFailed).json({
+        errorMessage: EnumHttpStatus[EnumHttpStatus.ValidationFailed],
       });
     }
-    case 401: {
-      return res.status(401).json({
-        errorMessage: 'Please Login First',
+    case EnumHttpStatus.PleaseLoginFirst: {
+      return res.status(EnumHttpStatus.PleaseLoginFirst).json({
+        errorMessage: EnumHttpStatus[EnumHttpStatus.PleaseLoginFirst],
       });
     }
     default: {

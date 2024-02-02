@@ -10,6 +10,7 @@ import EnumResponseError from '../models/enums/EnumResponseError';
 import ApiResponse from '../models/ApiResponse';
 import IUpdatePasswordRequest, { UpdatePasswordRequest } from '../models/IUpdatePasswordRequest';
 import { IUpdateUserNameRequest } from '../models/IUpdateUserNameRequest';
+import EnumHttpStatus from '../models/enums/EnumHttpStatus';
 
 @Route('user')
 @Tags('User')
@@ -24,7 +25,7 @@ export class UserController extends Controller {
     if (user) {
       return user;
     }
-    this.setStatus(401);
+    this.setStatus(EnumHttpStatus.PleaseLoginFirst);
     return {} as IUser;
   }
 
@@ -35,7 +36,7 @@ export class UserController extends Controller {
     if (result) {
       return new ApiResponse(EnumResponseError.Success);
     }
-    this.setStatus(500);
+    this.setStatus(EnumHttpStatus.InternalError);
     return new ApiResponse(EnumResponseError.UpdateFail);
   }
 
@@ -44,7 +45,7 @@ export class UserController extends Controller {
     const userFromToken = request.user as IUser;
     const bodyInstance = new UpdatePasswordRequest(body);
     if (bodyInstance.validatation !== EnumResponseError.Success) {
-      this.setStatus(400);
+      this.setStatus(EnumHttpStatus.ValidationFailed);
       return new ApiResponse(bodyInstance.validatation);
     }
 
@@ -53,7 +54,7 @@ export class UserController extends Controller {
       return new ApiResponse(EnumResponseError.Success);
     }
 
-    this.setStatus(500);
+    this.setStatus(EnumHttpStatus.InternalError);
     return new ApiResponse(EnumResponseError.UpdateFail);
   }
 }

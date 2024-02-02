@@ -1,6 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import * as express from 'express';
 import * as jwt from 'jsonwebtoken';
+import EnumHttpStatus from './models/enums/EnumHttpStatus';
 
 export function expressAuthentication(
   request: express.Request,
@@ -11,7 +12,7 @@ export function expressAuthentication(
   return new Promise((resolve, reject) => {
     jwt.verify(token, process.env.JWTSECRETKEY || '', (err: any, decoded: any) => {
       if (err) {
-        reject({ status: 401 }); // eslint-disable-line prefer-promise-reject-errors
+        reject({ status: EnumHttpStatus.PleaseLoginFirst }); // eslint-disable-line prefer-promise-reject-errors
       } else {
         resolve(decoded);
       }

@@ -10,6 +10,7 @@ import GoogleAuthMiddleware from '../middlewares/GoogleAuthMiddleware';
 import AuthService from '../services/AuthService';
 import { ILocalAuthRequest } from '../models/ILocalAuthRequest';
 import IUser from '../models/IUser';
+import EnumHttpStatus from '../models/enums/EnumHttpStatus';
 
 @Route('auth')
 @Tags('Auth')
@@ -42,7 +43,7 @@ export class AuthController extends Controller {
       const token = this.generateJwt(user);
       return Promise.resolve(token);
     }
-    this.setStatus(401);
+    this.setStatus(EnumHttpStatus.PleaseLoginFirst);
     return Promise.resolve('');
   }
 
