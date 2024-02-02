@@ -1,4 +1,10 @@
-import express, { Express, Router } from 'express';
+import express, {
+  Express,
+  Router,
+  Response as ExResponse,
+  Request as ExRequest,
+  NextFunction,
+} from 'express';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import passport from 'passport';
@@ -23,5 +29,30 @@ app.get('/failed', (req, res) => {
 });
 
 passport.use(googleStrategy);
+
+app.use((
+  err: Error,
+  req: ExRequest,
+  res: ExResponse,
+  next: NextFunction,
+): ExResponse | void => { /* eslint-disable-line consistent-return */
+  // @ts-ignore
+  switch (err.status) {
+    case 400: {
+      return res.status(400).json({
+        errorMessage: 'Validation Failed',
+      });
+    }
+    case 401: {
+      return res.status(401).json({
+        errorMessage: 'Please Login First',
+      });
+    }
+    default: {
+      break;
+    }
+  }
+  next();
+});
 
 export default app;

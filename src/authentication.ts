@@ -11,7 +11,7 @@ export function expressAuthentication(
   return new Promise((resolve, reject) => {
     jwt.verify(token, process.env.JWTSECRETKEY || '', (err: any, decoded: any) => {
       if (err) {
-        reject({}); // eslint-disable-line prefer-promise-reject-errors
+        reject({ status: 401 }); // eslint-disable-line prefer-promise-reject-errors
       } else {
         resolve(decoded);
       }
