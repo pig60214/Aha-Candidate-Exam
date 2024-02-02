@@ -10,7 +10,10 @@ import GoogleAuthMiddleware from '../middlewares/GoogleAuthMiddleware';
 import AuthService from '../services/AuthService';
 import { ILocalAuthRequest } from '../models/ILocalAuthRequest';
 import IUser from '../models/IUser';
+import EnumResponseError from '../models/enums/EnumResponseError';
+import ApiResponse from '../models/ApiResponse';
 import EnumHttpStatus from '../models/enums/EnumHttpStatus';
+import { ISignUpRequest, SignUpRequest } from '../models/ISignUpRequest';
 
 @Route('auth')
 @Tags('Auth')
@@ -29,6 +32,7 @@ export class AuthController extends Controller {
     const user: IUser = {
       email: profile._json.email || '', /* eslint-disable-line no-underscore-dangle */
       name: profile.displayName,
+      hasEmailVerified: true,
     };
     const token = this.generateJwt(user);
     this.setStatus(302);
@@ -49,5 +53,18 @@ export class AuthController extends Controller {
 
   private generateJwt(user: IUser): string {
     return jwt.sign(user, process.env.JWTSECRETKEY || '');
+  }
+
+  @Post('sign-up')
+  public async SignUp(@Body() request: ISignUpRequest): Promise<ApiResponse | string> {
+    const requestInstance = new SignUpRequest(request);
+    if (requestInstance.validatation !== EnumResponseError.Success) {
+      this.setStatus(EnumHttpStatus.ValidationFailed);
+      return new ApiResponse(requestInstance.validatation);
+    }
+
+    const user = await this.authService.createUser(request);
+    const token = this.generateJwt(user);
+    return token;
   }
 }

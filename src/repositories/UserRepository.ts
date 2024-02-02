@@ -1,22 +1,36 @@
 /* eslint-disable class-methods-use-this */
+import { ISignUpRequest } from '../models/ISignUpRequest';
 import IUser, { User } from '../models/IUser';
+import EnumResponseError from '../models/enums/EnumResponseError';
 
 export default class UserRepository {
-  // createUser = async (name: string, email: string, password: string): Promise<User> => {
-  //   const user = User.build({ name, email, password });
-  //   return await user.save();
-  // };
+  createUser = async (request: ISignUpRequest): Promise<IUser> => {
+    try {
+      const user = User.build({ email: request.email, password: request.password });
+      await user.save();
+      const response: IUser = user.Interface;
+      return response;
+    } catch (error: any) {
+      console.error(error);
+
+      if (error.name === 'SequelizeUniqueConstraintError') {
+        throw new Error(EnumResponseError[EnumResponseError.EmailExists]);
+      }
+      throw new Error(EnumResponseError[EnumResponseError.InternalError]);
+    }
+  };
 
   getUserProfile = async (email: string): Promise<IUser | null> => {
-    const user = await User.findOne({ where: { email } });
-    if (user) {
-      const response: IUser = {
-        email: user.email,
-        name: user.name,
-      };
-      return response;
+    try {
+      const user = await User.findOne({ where: { email } });
+      if (user) {
+        const response: IUser = user.Interface;
+        return response;
+      }
+    } catch (error) {
+      console.error(error);
+      throw new Error(EnumResponseError[EnumResponseError.InternalError]);
     }
-
     return null;
   };
 }

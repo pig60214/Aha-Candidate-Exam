@@ -8,6 +8,8 @@ enum EnumResponseError {
   PasswordShouldContainAtLeastOneSpecialCharacter,
   PasswordShouldContainAtLeast8Characters,
   NewPasswordShouldBeNotSameAsOldPassword,
+  EmailExists,
+  InternalError,
 }
 
 export default EnumResponseError;

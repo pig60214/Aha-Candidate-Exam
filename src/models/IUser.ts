@@ -10,6 +10,7 @@ import {
 export default interface IUser {
   email: string,
   name: string,
+  hasEmailVerified: boolean,
 }
 
 @Table
@@ -26,4 +27,17 @@ export class User extends Model implements IUser {
   @AllowNull(false)
   @Column
   password!: string;
+
+  @AllowNull(false)
+  @Default(false)
+  @Column
+  hasEmailVerified!: boolean;
+
+  get Interface(): IUser {
+    return {
+      email: this.email,
+      name: this.name,
+      hasEmailVerified: this.hasEmailVerified,
+    };
+  }
 }
