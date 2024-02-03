@@ -5,6 +5,7 @@ import {
   PrimaryKey,
   AllowNull,
   Default,
+  DataType,
 } from 'sequelize-typescript';
 
 export default interface IUser {
@@ -16,21 +17,21 @@ export default interface IUser {
 @Table
 export class User extends Model implements IUser {
   @PrimaryKey
-  @Column
+  @Column(DataType.STRING)
   email!: string;
 
   @AllowNull(false)
   @Default('')
-  @Column
+  @Column(DataType.STRING)
   name!: string;
 
   @AllowNull(false)
-  @Column
+  @Column(DataType.STRING)
   password!: string;
 
   @AllowNull(false)
   @Default(false)
-  @Column
+  @Column(DataType.BOOLEAN)
   hasEmailVerified!: boolean;
 
   get Interface(): IUser {
