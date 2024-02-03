@@ -13,7 +13,8 @@ import swaggerDocument from './routes/swagger.json';
 import googleStrategy from './authStrategy/googleStrategy';
 import connection from './repositories/connect';
 import EnumHttpStatus from './models/enums/EnumHttpStatus';
-import EnumResponseError from './models/enums/EnumResponseError';
+import ApiResponseError from './models/ApiResponseError';
+import ApiResponse from './models/ApiResponse';
 
 try {
   connection.sync();
@@ -45,41 +46,15 @@ app.use((
   res: ExResponse,
   next: NextFunction,
 ): ExResponse | void => { /* eslint-disable-line consistent-return */
-  // @ts-ignore
-  if (err.status) {
-    // @ts-ignore
-    switch (err.status) {
-      case EnumHttpStatus.ValidationFailed: {
-        return res.status(EnumHttpStatus.ValidationFailed).json({
-          errorMessage: EnumHttpStatus[EnumHttpStatus.ValidationFailed],
-        });
-      }
-      case EnumHttpStatus.PleaseLoginFirst: {
-        return res.status(EnumHttpStatus.PleaseLoginFirst).json({
-          errorMessage: EnumHttpStatus[EnumHttpStatus.PleaseLoginFirst],
-        });
-      }
-      default: {
-        break;
-      }
-    }
+  if (err instanceof ApiResponseError) {
+    return res.status(err.httpStatus).json(new ApiResponse(err.message));
   }
 
-  switch (err.message) {
-    case EnumResponseError[EnumResponseError.EmailExists]: {
-      return res.status(EnumHttpStatus.ValidationFailed).json({
-        errorMessage: err.message,
-      });
-    }
-    case EnumResponseError[EnumResponseError.InternalError]: {
-      return res.status(EnumHttpStatus.InternalError).json({
-        errorMessage: err.message,
-      });
-    }
-    default: {
-      break;
-    }
+  // @ts-ignore
+  if (err.status && err.status === EnumHttpStatus.ValidationFailed) {
+    return res.status(EnumHttpStatus.ValidationFailed).json(new ApiResponse(EnumHttpStatus[EnumHttpStatus.ValidationFailed]));
   }
+
   next();
 });
 

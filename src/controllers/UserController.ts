@@ -7,10 +7,10 @@ import * as express from 'express';
 import IUser from '../models/IUser';
 import UserService from '../services/UserService';
 import EnumResponseError from '../models/enums/EnumResponseError';
-import ApiResponse from '../models/ApiResponse';
 import IUpdatePasswordRequest, { UpdatePasswordRequest } from '../models/IUpdatePasswordRequest';
 import { IUpdateUserNameRequest } from '../models/IUpdateUserNameRequest';
-import EnumHttpStatus from '../models/enums/EnumHttpStatus';
+import ApiResponseError from '../models/ApiResponseError';
+import ApiResponse from '../models/ApiResponse';
 
 @Route('user')
 @Tags('User')
@@ -25,8 +25,7 @@ export class UserController extends Controller {
     if (user) {
       return user;
     }
-    this.setStatus(EnumHttpStatus.PleaseLoginFirst);
-    return {} as IUser;
+    throw new ApiResponseError(EnumResponseError.PleaseLoginFirst);
   }
 
   @Post('/update-name')
@@ -34,10 +33,9 @@ export class UserController extends Controller {
     const userFromToken = request.user as IUser;
     const result: boolean = await this.userService.updateUserName(userFromToken.email, body.name);
     if (result) {
-      return new ApiResponse(EnumResponseError.Success);
+      return new ApiResponse();
     }
-    this.setStatus(EnumHttpStatus.InternalError);
-    return new ApiResponse(EnumResponseError.UpdateFail);
+    throw new ApiResponseError(EnumResponseError.InternalError);
   }
 
   @Post('/update-password')
@@ -45,16 +43,14 @@ export class UserController extends Controller {
     const userFromToken = request.user as IUser;
     const bodyInstance = new UpdatePasswordRequest(body);
     if (bodyInstance.validatation !== EnumResponseError.Success) {
-      this.setStatus(EnumHttpStatus.ValidationFailed);
-      return new ApiResponse(bodyInstance.validatation);
+      throw new ApiResponseError(bodyInstance.validatation);
     }
 
     const result: boolean = await this.userService.updatePassword(userFromToken.email, body);
     if (result) {
-      return new ApiResponse(EnumResponseError.Success);
+      return new ApiResponse();
     }
 
-    this.setStatus(EnumHttpStatus.InternalError);
-    return new ApiResponse(EnumResponseError.UpdateFail);
+    throw new ApiResponseError(EnumResponseError.InternalError);
   }
 }

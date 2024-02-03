@@ -11,9 +11,8 @@ import AuthService from '../services/AuthService';
 import { ILocalAuthRequest } from '../models/ILocalAuthRequest';
 import IUser from '../models/IUser';
 import EnumResponseError from '../models/enums/EnumResponseError';
-import ApiResponse from '../models/ApiResponse';
-import EnumHttpStatus from '../models/enums/EnumHttpStatus';
 import { ISignUpRequest, SignUpRequest } from '../models/ISignUpRequest';
+import ApiResponseError from '../models/ApiResponseError';
 
 @Route('auth')
 @Tags('Auth')
@@ -47,8 +46,7 @@ export class AuthController extends Controller {
       const token = this.generateJwt(user);
       return Promise.resolve(token);
     }
-    this.setStatus(EnumHttpStatus.PleaseLoginFirst);
-    return Promise.resolve('');
+    throw new ApiResponseError(EnumResponseError.PleaseLoginFirst);
   }
 
   private generateJwt(user: IUser): string {
@@ -56,11 +54,10 @@ export class AuthController extends Controller {
   }
 
   @Post('sign-up')
-  public async SignUp(@Body() request: ISignUpRequest): Promise<ApiResponse | string> {
+  public async SignUp(@Body() request: ISignUpRequest): Promise<string> {
     const requestInstance = new SignUpRequest(request);
     if (requestInstance.validatation !== EnumResponseError.Success) {
-      this.setStatus(EnumHttpStatus.ValidationFailed);
-      return new ApiResponse(requestInstance.validatation);
+      throw new ApiResponseError(requestInstance.validatation);
     }
 
     const user = await this.authService.createUser(request);

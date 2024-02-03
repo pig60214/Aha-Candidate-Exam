@@ -1,6 +1,5 @@
 enum EnumResponseError {
   Success,
-  UpdateFail,
   NewPasswordsShouldBeSame,
   PasswordShouldContainAtLeastOneLowerCharacter,
   PasswordShouldContainAtLeastOneUpperCharacter,
@@ -10,6 +9,7 @@ enum EnumResponseError {
   NewPasswordShouldBeNotSameAsOldPassword,
   EmailExists,
   InternalError,
+  PleaseLoginFirst,
 }
 
 export default EnumResponseError;

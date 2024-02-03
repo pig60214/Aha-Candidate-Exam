@@ -1,4 +1,5 @@
 /* eslint-disable class-methods-use-this */
+import ApiResponseError from '../models/ApiResponseError';
 import { ISignUpRequest } from '../models/ISignUpRequest';
 import IUser, { User } from '../models/IUser';
 import EnumResponseError from '../models/enums/EnumResponseError';
@@ -14,9 +15,9 @@ export default class UserRepository {
       console.error(error);
 
       if (error.name === 'SequelizeUniqueConstraintError') {
-        throw new Error(EnumResponseError[EnumResponseError.EmailExists]);
+        throw new ApiResponseError(EnumResponseError.EmailExists);
       }
-      throw new Error(EnumResponseError[EnumResponseError.InternalError]);
+      throw new ApiResponseError(EnumResponseError.InternalError);
     }
   };
 
@@ -29,7 +30,7 @@ export default class UserRepository {
       }
     } catch (error) {
       console.error(error);
-      throw new Error(EnumResponseError[EnumResponseError.InternalError]);
+      throw new ApiResponseError(EnumResponseError.InternalError);
     }
     return null;
   };
