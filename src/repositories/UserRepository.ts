@@ -7,6 +7,32 @@ import EnumResponseError from '../models/enums/EnumResponseError';
 import EnumSignUpWay from '../models/enums/EnumSignUpWay';
 
 export default class UserRepository {
+  async updatePassword(email: string, oldPassword: string, newPassword: string): Promise<number> {
+    try {
+      const [rowsUpdated] = await User.update(
+        { password: newPassword },
+        { where: { email, password: oldPassword } },
+      );
+      return rowsUpdated;
+    } catch (error) {
+      console.error(error);
+      throw new ApiResponseError(EnumResponseError.InternalError);
+    }
+  }
+
+  async updateName(email: string, name: string): Promise<number> {
+    try {
+      const [rowsUpdated] = await User.update(
+        { name },
+        { where: { email } },
+      );
+      return rowsUpdated;
+    } catch (error) {
+      console.error(error);
+      throw new ApiResponseError(EnumResponseError.InternalError);
+    }
+  }
+
   async createUserFromGoogleAuth(user: IUser) {
     try {
       const userFromDb = User.build({

@@ -3,7 +3,7 @@ import EnumResponseError from './enums/EnumResponseError';
 
 const MAPPING: Record<number, EnumHttpStatus> = {
   [EnumResponseError.Success]: EnumHttpStatus.Success,
-  [EnumResponseError.NewPasswordsShouldBeSame]: EnumHttpStatus.Success,
+  [EnumResponseError.NewPasswordsShouldBeSame]: EnumHttpStatus.ValidationFailed,
   [EnumResponseError.PasswordShouldContainAtLeastOneLowerCharacter]: EnumHttpStatus.ValidationFailed,
   [EnumResponseError.PasswordShouldContainAtLeastOneUpperCharacter]: EnumHttpStatus.ValidationFailed,
   [EnumResponseError.PasswordShouldContainAtLeastOneDigitCharacter]: EnumHttpStatus.ValidationFailed,
@@ -15,6 +15,7 @@ const MAPPING: Record<number, EnumHttpStatus> = {
   [EnumResponseError.EmailFormatWrong]: EnumHttpStatus.ValidationFailed,
   [EnumResponseError.PleaseSignUpFirst]: EnumHttpStatus.Unauthorized,
   [EnumResponseError.WrongPassword]: EnumHttpStatus.Unauthorized,
+  [EnumResponseError.OldPasswordIsWrong]: EnumHttpStatus.Unauthorized,
 };
 
 export default class ApiResponseError extends Error {

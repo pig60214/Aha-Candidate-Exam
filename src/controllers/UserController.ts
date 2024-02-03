@@ -29,13 +29,10 @@ export class UserController extends Controller {
   }
 
   @Post('/update-name')
-  public async updateUserName(@Request() request: express.Request, @Body() body: IUpdateUserNameRequest): Promise<ApiResponse> {
+  public async updateName(@Request() request: express.Request, @Body() body: IUpdateUserNameRequest): Promise<ApiResponse> {
     const userFromToken = request.user as IUser;
-    const result: boolean = await this.userService.updateUserName(userFromToken.email, body.name);
-    if (result) {
-      return new ApiResponse();
-    }
-    throw new ApiResponseError(EnumResponseError.InternalError);
+    await this.userService.updateName(userFromToken.email, body.name);
+    return new ApiResponse();
   }
 
   @Post('/update-password')
@@ -46,11 +43,7 @@ export class UserController extends Controller {
       throw new ApiResponseError(bodyInstance.validatation);
     }
 
-    const result: boolean = await this.userService.updatePassword(userFromToken.email, body);
-    if (result) {
-      return new ApiResponse();
-    }
-
-    throw new ApiResponseError(EnumResponseError.InternalError);
+    await this.userService.updatePassword(userFromToken.email, body.oldPassword, body.newPassword);
+    return new ApiResponse();
   }
 }

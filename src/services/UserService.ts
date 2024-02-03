@@ -1,25 +1,24 @@
 /* eslint-disable class-methods-use-this */
-import IUpdatePasswordRequest from '../models/IUpdatePasswordRequest';
+import ApiResponseError from '../models/ApiResponseError';
 import IUser from '../models/IUser';
+import EnumResponseError from '../models/enums/EnumResponseError';
 import UserRepository from '../repositories/UserRepository';
 
 export default class UserService {
   private userRepository = new UserRepository();
 
-  async updatePassword(email: string, body: IUpdatePasswordRequest): Promise<boolean> {
-    if (email === 'string2') {
-      return Promise.resolve(false);
+  async updatePassword(email: string, oldPassword: string, newPassword: string) {
+    const rowsUpdated = await this.userRepository.updatePassword(email, oldPassword, newPassword);
+    if (rowsUpdated === 0) {
+      throw new ApiResponseError(EnumResponseError.OldPasswordIsWrong);
     }
-
-    return Promise.resolve(true);
   }
 
-  async updateUserName(email: string, name: string): Promise<boolean> {
-    if (email === 'string2') {
-      return Promise.resolve(false);
+  async updateName(email: string, name: string) {
+    const rowsUpdated = await this.userRepository.updateName(email, name);
+    if (rowsUpdated === 0) {
+      throw new ApiResponseError(EnumResponseError.PleaseLoginFirst);
     }
-
-    return Promise.resolve(true);
   }
 
   async getUserProfile(email: string): Promise<IUser | null> {
