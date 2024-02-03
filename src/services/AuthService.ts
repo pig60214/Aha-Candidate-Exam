@@ -9,10 +9,12 @@ import UserRepository from '../repositories/UserRepository';
 import ApiResponseError from '../models/ApiResponseError';
 import EnumResponseError from '../models/enums/EnumResponseError';
 import { ILoginResponse } from '../models/ILoginResponse';
+import LoginLogRepository from '../repositories/LoginLogRepository';
 
 dotenv.config();
 export default class AuthService {
   private userRepository = new UserRepository();
+  private loginLogRepository = new LoginLogRepository();
 
   async createUser(request: ISignUpRequest): Promise<IUser> {
     const user = await this.userRepository.createUser(request);
@@ -33,6 +35,9 @@ export default class AuthService {
       token,
       ...user.Interface,
     };
+
+    await this.loginLogRepository.addLoginLog(request.email);
+
     return response;
   }
 

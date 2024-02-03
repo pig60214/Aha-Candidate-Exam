@@ -1,6 +1,7 @@
 import { Sequelize } from 'sequelize-typescript';
 import * as pg from 'pg';
 import { User } from '../models/IUser';
+import LoginLog from '../models/LoginLog';
 
 const connection = new Sequelize({
   dialect: 'postgres',
@@ -17,7 +18,7 @@ const connection = new Sequelize({
     },
   },
   logging: false,
-  models: [User],
+  models: [User, LoginLog],
 });
 
 export default connection;
