@@ -10,6 +10,8 @@ enum EnumResponseError {
   EmailExists,
   InternalError,
   PleaseLoginFirst,
+  EmailFormatWrong,
+  PleaseSignUpFirst,
 }
 
 export default EnumResponseError;

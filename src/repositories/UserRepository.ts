@@ -21,6 +21,19 @@ export default class UserRepository {
     }
   };
 
+  emailVerifiedSuccess = async (email: string): Promise<number> => {
+    try {
+      const [rowsUpdated] = await User.update(
+        { hasEmailVerified: true },
+        { where: { email } },
+      );
+      return rowsUpdated;
+    } catch (error) {
+      console.error(error);
+      throw new ApiResponseError(EnumResponseError.InternalError);
+    }
+  };
+
   getUserProfile = async (email: string): Promise<IUser | null> => {
     try {
       const user = await User.findOne({ where: { email } });

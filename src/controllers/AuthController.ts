@@ -4,7 +4,6 @@ import {
   Controller, Get, Route, Tags, Middlewares, Request, Hidden, Body, Post,
 } from 'tsoa';
 import { Profile } from 'passport-google-oauth20';
-import jwt from 'jsonwebtoken';
 import express from 'express';
 import GoogleAuthMiddleware from '../middlewares/GoogleAuthMiddleware';
 import AuthService from '../services/AuthService';
@@ -13,6 +12,7 @@ import IUser from '../models/IUser';
 import EnumResponseError from '../models/enums/EnumResponseError';
 import { ISignUpRequest, SignUpRequest } from '../models/ISignUpRequest';
 import ApiResponseError from '../models/ApiResponseError';
+import ApiResponse from '../models/ApiResponse';
 
 @Route('auth')
 @Tags('Auth')
@@ -33,7 +33,7 @@ export class AuthController extends Controller {
       name: profile.displayName,
       hasEmailVerified: true,
     };
-    const token = this.generateJwt(user);
+    const token = this.authService.generateJwt(user);
     this.setStatus(302);
     const response = (<any>request).res as express.Response;
     response.redirect(`https://ahacandidateexam.retool.com/app/google-auth-callback?jwt=${token}`);
@@ -43,14 +43,10 @@ export class AuthController extends Controller {
   public async login(@Body() request: ILocalAuthRequest): Promise<string> {
     const user = await this.authService.findUser(request);
     if (user) {
-      const token = this.generateJwt(user);
+      const token = this.authService.generateJwt(user);
       return Promise.resolve(token);
     }
     throw new ApiResponseError(EnumResponseError.PleaseLoginFirst);
-  }
-
-  private generateJwt(user: IUser): string {
-    return jwt.sign(user, process.env.JWTSECRETKEY || '');
   }
 
   @Post('sign-up')
@@ -61,7 +57,21 @@ export class AuthController extends Controller {
     }
 
     const user = await this.authService.createUser(request);
-    const token = this.generateJwt(user);
+    const token = this.authService.generateJwt(user);
     return token;
+  }
+
+  @Get('/send-email-verification/{email}')
+  public async sendEmailVerification(email: string): Promise<ApiResponse> {
+    await this.authService.sendEmailVerification(email);
+    return new ApiResponse();
+  }
+
+  @Get('/verify-email/{token}')
+  public async verifyEmail(@Request() request: express.Request, token: string) {
+    await this.authService.verifyEmail(token);
+    this.setStatus(302)
+    const response = (<any>request).res as express.Response;
+    response.redirect(`https://ahacandidateexam.retool.com/app/login`);
   }
 }
