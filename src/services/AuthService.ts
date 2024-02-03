@@ -14,6 +14,7 @@ import LoginLogRepository from '../repositories/LoginLogRepository';
 dotenv.config();
 export default class AuthService {
   private userRepository = new UserRepository();
+
   private loginLogRepository = new LoginLogRepository();
 
   async createUser(request: ISignUpRequest): Promise<IUser> {
