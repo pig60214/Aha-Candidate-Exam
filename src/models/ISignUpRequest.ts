@@ -17,8 +17,8 @@ export class SignUpRequest implements ISignUpRequest, IRequest {
   constructor(request: ISignUpRequest) {
     this.email = request.email;
     this.password = request.password;
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email)) {
-      this.validatation = EnumResponseError.EmailFormatWrong;
+    this.validatation = validationHelper.isValidEmail(this.email);
+    if (this.validatation !== EnumResponseError.Success) {
       return;
     }
     this.validatation = validationHelper.isValidPassword(this.password);

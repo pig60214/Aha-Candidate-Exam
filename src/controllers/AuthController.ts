@@ -13,6 +13,7 @@ import EnumResponseError from '../models/enums/EnumResponseError';
 import { ISignUpRequest, SignUpRequest } from '../models/ISignUpRequest';
 import ApiResponseError from '../models/ApiResponseError';
 import ApiResponse from '../models/ApiResponse';
+import validationHelper from '../helpers/validationHelper';
 
 @Route('auth')
 @Tags('Auth')
@@ -59,6 +60,11 @@ export class AuthController extends Controller {
 
   @Get('/send-email-verification/{email}')
   public async sendEmailVerification(email: string): Promise<ApiResponse> {
+    const validatation = validationHelper.isValidEmail(email);
+    if (validatation !== EnumResponseError.Success) {
+      throw new ApiResponseError(EnumResponseError.EmailFormatWrong);
+    }
+
     await this.authService.sendEmailVerification(email);
     return new ApiResponse();
   }

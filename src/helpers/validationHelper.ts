@@ -24,6 +24,12 @@ const validationHelper = {
 
     return EnumResponseError.Success;
   },
+  isValidEmail: (email: string): EnumResponseError => {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return EnumResponseError.EmailFormatWrong;
+    }
+    return EnumResponseError.Success;
+  }
 };
 
 export default validationHelper;
