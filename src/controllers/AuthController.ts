@@ -14,6 +14,7 @@ import { ISignUpRequest, SignUpRequest } from '../models/ISignUpRequest';
 import ApiResponseError from '../models/ApiResponseError';
 import ApiResponse from '../models/ApiResponse';
 import validationHelper from '../helpers/validationHelper';
+import { ILoginResponse } from '../models/ILoginResponse';
 
 @Route('auth')
 @Tags('Auth')
@@ -41,7 +42,7 @@ export class AuthController extends Controller {
   }
 
   @Post('login')
-  public async login(@Body() request: ILocalAuthRequest): Promise<string> {
+  public async login(@Body() request: ILocalAuthRequest): Promise<ILoginResponse> {
     const token = await this.authService.login(request);
     return token;
   }
@@ -77,3 +78,4 @@ export class AuthController extends Controller {
     response.redirect(`https://ahacandidateexam.retool.com/app/login`);
   }
 }
+

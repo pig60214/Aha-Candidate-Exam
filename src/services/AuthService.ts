@@ -8,6 +8,7 @@ import IUser from '../models/IUser';
 import UserRepository from '../repositories/UserRepository';
 import ApiResponseError from '../models/ApiResponseError';
 import EnumResponseError from '../models/enums/EnumResponseError';
+import { ILoginResponse } from '../models/ILoginResponse';
 
 const USER_LIST = [
   {
@@ -33,7 +34,7 @@ export default class AuthService {
     return user;
   }
 
-  async login(request: ILocalAuthRequest): Promise<string> {
+  async login(request: ILocalAuthRequest): Promise<ILoginResponse> {
     const user = await this.userRepository.login(request);
     if(!user) {
       throw new ApiResponseError(EnumResponseError.PleaseSignUpFirst);
@@ -42,7 +43,11 @@ export default class AuthService {
     }
 
     const token = this.generateJwt(user.Interface);
-    return token;
+    const response = {
+      token,
+      ...user.Interface,
+    }
+    return response;
   }
 
   generateJwt(object: any): string {
