@@ -17,10 +17,18 @@ export default class AuthService {
 
   private loginLogRepository = new LoginLogRepository();
 
-  async createUser(request: ISignUpRequest): Promise<IUser> {
+  async createUser(request: ISignUpRequest): Promise<string> {
     const user = await this.userRepository.createUser(request);
     await this.sendEmailVerification(request.email);
-    return user;
+    const token = this.generateJwt(user);
+    return token;
+  }
+
+  async loginFromGoogleAuth(user: IUser): Promise<string> {
+    const userFromDb = await this.userRepository.getUserProfile(user.email) ?? await this.userRepository.createUserFromGoogleAuth(user);
+    const token = this.generateJwt(userFromDb);
+    await this.loginLogRepository.addLoginLog(userFromDb.email);
+    return token;
   }
 
   async login(request: ILocalAuthRequest): Promise<ILoginResponse> {

@@ -4,11 +4,34 @@ import { ILocalAuthRequest } from '../models/ILocalAuthRequest';
 import { ISignUpRequest } from '../models/ISignUpRequest';
 import IUser, { User } from '../models/IUser';
 import EnumResponseError from '../models/enums/EnumResponseError';
+import EnumSignUpWay from '../models/enums/EnumSignUpWay';
 
 export default class UserRepository {
+  async createUserFromGoogleAuth(user: IUser) {
+    try {
+      const userFromDb = User.build({
+        email: user.email,
+        password: '',
+        name: user.name,
+        hasEmailVerified: true,
+        signUpWay: EnumSignUpWay.Google,
+      });
+      await userFromDb.save();
+      const response: IUser = userFromDb.Interface;
+      return response;
+    } catch (error: any) {
+      console.error(error);
+
+      if (error.name === 'SequelizeUniqueConstraintError') {
+        throw new ApiResponseError(EnumResponseError.EmailExists);
+      }
+      throw new ApiResponseError(EnumResponseError.InternalError);
+    }
+  }
+
   createUser = async (request: ISignUpRequest): Promise<IUser> => {
     try {
-      const user = User.build({ email: request.email, password: request.password });
+      const user = User.build({ email: request.email, password: request.password, signUpWay: EnumSignUpWay.Local });
       await user.save();
       const response: IUser = user.Interface;
       return response;
@@ -51,7 +74,7 @@ export default class UserRepository {
 
   login = async (request: ILocalAuthRequest): Promise<User | null> => {
     try {
-      const user = await User.findOne({ where: { email: request.email } });
+      const user = await User.findOne({ where: { email: request.email, signUpWay: EnumSignUpWay.Local } });
       return user;
     } catch (error) {
       console.error(error);

@@ -7,6 +7,7 @@ import {
   Default,
   DataType,
 } from 'sequelize-typescript';
+import EnumSignUpWay from './enums/EnumSignUpWay';
 
 export default interface IUser {
   email: string,
@@ -33,6 +34,10 @@ export class User extends Model implements IUser {
   @Default(false)
   @Column(DataType.BOOLEAN)
   hasEmailVerified!: boolean;
+
+  @AllowNull(false)
+  @Column(DataType.INTEGER)
+  signUpWay!: EnumSignUpWay;
 
   get Interface(): IUser {
     return {
