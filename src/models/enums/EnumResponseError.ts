@@ -12,6 +12,7 @@ enum EnumResponseError {
   PleaseLoginFirst,
   EmailFormatWrong,
   PleaseSignUpFirst,
+  WrongPassword,
 }
 
 export default EnumResponseError;

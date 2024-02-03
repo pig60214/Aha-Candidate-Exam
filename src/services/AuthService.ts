@@ -33,9 +33,16 @@ export default class AuthService {
     return user;
   }
 
-  async findUser(request: ILocalAuthRequest): Promise<IUser | undefined> {
-    const user = USER_LIST.find((u) => u.email === request.email && u.password === request.password);
-    return Promise.resolve(user);
+  async login(request: ILocalAuthRequest): Promise<string> {
+    const user = await this.userRepository.login(request);
+    if(!user) {
+      throw new ApiResponseError(EnumResponseError.PleaseSignUpFirst);
+    } else if (user.password !== request.password) {
+      throw new ApiResponseError(EnumResponseError.WrongPassword)
+    }
+
+    const token = this.generateJwt(user.Interface);
+    return token;
   }
 
   generateJwt(object: any): string {

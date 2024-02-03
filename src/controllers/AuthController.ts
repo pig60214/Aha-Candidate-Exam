@@ -41,12 +41,8 @@ export class AuthController extends Controller {
 
   @Post('login')
   public async login(@Body() request: ILocalAuthRequest): Promise<string> {
-    const user = await this.authService.findUser(request);
-    if (user) {
-      const token = this.authService.generateJwt(user);
-      return Promise.resolve(token);
-    }
-    throw new ApiResponseError(EnumResponseError.PleaseLoginFirst);
+    const token = await this.authService.login(request);
+    return token;
   }
 
   @Post('sign-up')

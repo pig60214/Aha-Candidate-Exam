@@ -14,6 +14,7 @@ const MAPPING: Record<number, EnumHttpStatus> = {
   [EnumResponseError.PleaseLoginFirst]: EnumHttpStatus.Unauthorized,
   [EnumResponseError.EmailFormatWrong]: EnumHttpStatus.ValidationFailed,
   [EnumResponseError.PleaseSignUpFirst]: EnumHttpStatus.Unauthorized,
+  [EnumResponseError.WrongPassword]: EnumHttpStatus.Unauthorized,
 };
 
 export default class ApiResponseError extends Error {

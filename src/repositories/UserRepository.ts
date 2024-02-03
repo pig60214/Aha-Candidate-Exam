@@ -1,5 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import ApiResponseError from '../models/ApiResponseError';
+import { ILocalAuthRequest } from '../models/ILocalAuthRequest';
 import { ISignUpRequest } from '../models/ISignUpRequest';
 import IUser, { User } from '../models/IUser';
 import EnumResponseError from '../models/enums/EnumResponseError';
@@ -46,5 +47,15 @@ export default class UserRepository {
       throw new ApiResponseError(EnumResponseError.InternalError);
     }
     return null;
+  };
+
+  login = async (request: ILocalAuthRequest): Promise<User | null> => {
+    try {
+      const user = await User.findOne({ where: { email: request.email} });
+      return user;
+    } catch (error) {
+      console.error(error);
+      throw new ApiResponseError(EnumResponseError.InternalError);
+    }
   };
 }
