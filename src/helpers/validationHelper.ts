@@ -29,7 +29,7 @@ const validationHelper = {
       return EnumResponseError.EmailFormatWrong;
     }
     return EnumResponseError.Success;
-  }
+  },
 };
 
 export default validationHelper;

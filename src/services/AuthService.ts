@@ -10,20 +10,6 @@ import ApiResponseError from '../models/ApiResponseError';
 import EnumResponseError from '../models/enums/EnumResponseError';
 import { ILoginResponse } from '../models/ILoginResponse';
 
-const USER_LIST = [
-  {
-    email: 'string',
-    password: 'string',
-    name: 'tttt',
-    hasEmailVerified: true,
-  },
-  {
-    email: 'string2',
-    password: 'string',
-    name: 'tttt2',
-    hasEmailVerified: false,
-  },
-];
 dotenv.config();
 export default class AuthService {
   private userRepository = new UserRepository();
@@ -36,17 +22,17 @@ export default class AuthService {
 
   async login(request: ILocalAuthRequest): Promise<ILoginResponse> {
     const user = await this.userRepository.login(request);
-    if(!user) {
+    if (!user) {
       throw new ApiResponseError(EnumResponseError.PleaseSignUpFirst);
     } else if (user.password !== request.password) {
-      throw new ApiResponseError(EnumResponseError.WrongPassword)
+      throw new ApiResponseError(EnumResponseError.WrongPassword);
     }
 
     const token = this.generateJwt(user.Interface);
     const response = {
       token,
       ...user.Interface,
-    }
+    };
     return response;
   }
 
@@ -86,7 +72,7 @@ export default class AuthService {
 
     const info = await transporter.sendMail(mailData);
 
-    if(!info.messageId) {
+    if (!info.messageId) {
       throw new ApiResponseError(EnumResponseError.InternalError);
     }
   }
