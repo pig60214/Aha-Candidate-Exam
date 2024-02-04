@@ -62,11 +62,11 @@ export default class UserRepository {
       const response: IUser = user.Interface;
       return response;
     } catch (error: any) {
-      console.error(error);
-
       if (error.name === 'SequelizeUniqueConstraintError') {
         throw new ApiResponseError(EnumResponseError.EmailExists);
       }
+
+      console.error(error);
       throw new ApiResponseError(EnumResponseError.InternalError);
     }
   };
