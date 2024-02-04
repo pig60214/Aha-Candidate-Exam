@@ -1,7 +1,11 @@
 import EnumResponseError from '../models/enums/EnumResponseError';
 
 const validationHelper = {
-  isValidPassword: (password: string): EnumResponseError => {
+  isValidPassword: (password: string, confirmPassword: string): EnumResponseError => {
+    if (password !== confirmPassword) {
+      return EnumResponseError.PasswordAndConfirmPasswordShouldBeSame;
+    }
+
     if (!/[a-z]/.test(password)) {
       return EnumResponseError.PasswordShouldContainAtLeastOneLowerCharacter;
     }

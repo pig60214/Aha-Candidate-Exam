@@ -43,7 +43,7 @@ export class UserController extends Controller {
       throw new ApiResponseError(bodyInstance.validatation);
     }
 
-    await this.userService.updatePassword(userFromToken.email, body.oldPassword, body.newPassword);
+    await this.userService.updatePassword(userFromToken.email, body.oldPassword, body.password);
     return new ApiResponse();
   }
 }

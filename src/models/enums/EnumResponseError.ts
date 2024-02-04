@@ -1,6 +1,6 @@
 enum EnumResponseError {
   Success,
-  NewPasswordsShouldBeSame,
+  PasswordAndConfirmPasswordShouldBeSame,
   PasswordShouldContainAtLeastOneLowerCharacter,
   PasswordShouldContainAtLeastOneUpperCharacter,
   PasswordShouldContainAtLeastOneDigitCharacter,

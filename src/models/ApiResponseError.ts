@@ -3,7 +3,7 @@ import EnumResponseError from './enums/EnumResponseError';
 
 const MAPPING: Record<number, EnumHttpStatus> = {
   [EnumResponseError.Success]: EnumHttpStatus.Success,
-  [EnumResponseError.NewPasswordsShouldBeSame]: EnumHttpStatus.ValidationFailed,
+  [EnumResponseError.PasswordAndConfirmPasswordShouldBeSame]: EnumHttpStatus.ValidationFailed,
   [EnumResponseError.PasswordShouldContainAtLeastOneLowerCharacter]: EnumHttpStatus.ValidationFailed,
   [EnumResponseError.PasswordShouldContainAtLeastOneUpperCharacter]: EnumHttpStatus.ValidationFailed,
   [EnumResponseError.PasswordShouldContainAtLeastOneDigitCharacter]: EnumHttpStatus.ValidationFailed,

@@ -3,37 +3,32 @@ import EnumResponseError from './enums/EnumResponseError';
 
 export default interface IUpdatePasswordRequest {
   oldPassword: string;
-  newPassword: string;
-  reenterNewPassword: string;
+  password: string;
+  confirmPassword: string;
 }
 
-export class UpdatePasswordRequest {
+export class UpdatePasswordRequest implements IUpdatePasswordRequest {
   oldPassword: string;
 
-  newPassword: string;
+  password: string;
 
-  reenterNewPassword: string;
+  confirmPassword: string;
 
   validatation: EnumResponseError;
 
   validateFormat = () => {
-    if (this.newPassword === this.oldPassword) {
+    if (this.password === this.oldPassword) {
       this.validatation = EnumResponseError.NewPasswordShouldBeNotSameAsOldPassword;
       return;
     }
 
-    if (this.newPassword !== this.reenterNewPassword) {
-      this.validatation = EnumResponseError.NewPasswordsShouldBeSame;
-      return;
-    }
-
-    this.validatation = validationHelper.isValidPassword(this.newPassword);
+    this.validatation = validationHelper.isValidPassword(this.password, this.confirmPassword);
   };
 
   constructor(request: IUpdatePasswordRequest) {
     this.oldPassword = request.oldPassword;
-    this.newPassword = request.newPassword;
-    this.reenterNewPassword = request.reenterNewPassword;
+    this.password = request.password;
+    this.confirmPassword = request.confirmPassword;
     this.validatation = EnumResponseError.Success;
 
     this.validateFormat();
