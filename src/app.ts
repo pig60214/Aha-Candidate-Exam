@@ -16,12 +16,9 @@ import ApiResponseError from './models/ApiResponseError';
 import ApiResponse from './models/ApiResponse';
 
 try {
-  console.info('DB Connecting...');
-  connection.sync().then(() => {
-    console.info('DB Connect Success');
-  });
+  connection.sync();
 } catch (error) {
-  console.error('DB Connect Fail');
+  console.error('DB Sync Fail');
 }
 
 const app: Express = express();
