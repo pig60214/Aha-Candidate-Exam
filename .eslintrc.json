@@ -12,7 +12,7 @@
     },
     "rules": {
       "max-len": ["error", 150],
-      "no-console": ["error", { "allow": ["error"] }],
+      "no-console": ["error", { "allow": ["error", "info"] }],
       "@typescript-eslint/indent": ["error", 2, { "ignoredNodes": ["PropertyDefinition"], "SwitchCase": 1 }]
     }
 }
