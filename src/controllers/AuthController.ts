@@ -8,7 +8,6 @@ import express from 'express';
 import GoogleAuthMiddleware from '../middlewares/GoogleAuthMiddleware';
 import AuthService from '../services/AuthService';
 import { ILocalAuthRequest } from '../models/ILocalAuthRequest';
-import IUser from '../models/IUser';
 import EnumResponseError from '../models/enums/EnumResponseError';
 import { ISignUpRequest, SignUpRequest } from '../models/ISignUpRequest';
 import ApiResponseError from '../models/ApiResponseError';
@@ -30,12 +29,9 @@ export class AuthController extends Controller {
   @Middlewares(GoogleAuthMiddleware.Callback)
   public async callback(@Request() request: express.Request) {
     const profile = request.user as Profile;
-    const user: IUser = {
-      email: profile._json.email || '', /* eslint-disable-line no-underscore-dangle */
-      name: profile.displayName,
-      hasEmailVerified: true,
-    };
-    const token = await this.authService.loginFromGoogleAuth(user);
+    const email = profile._json.email || ''; /* eslint-disable-line no-underscore-dangle */
+    const name = profile.displayName;
+    const token = await this.authService.loginFromGoogleAuth(email, name);
     this.setStatus(302);
     const response = (<any>request).res as express.Response;
     response.redirect(`https://ahacandidateexam.retool.com/app/google-auth-callback?jwt=${token}`);

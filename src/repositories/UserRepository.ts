@@ -33,12 +33,12 @@ export default class UserRepository {
     }
   }
 
-  async createUserFromGoogleAuth(user: IUser) {
+  async createUserFromGoogleAuth(email: string, name: string) {
     try {
       const userFromDb = User.build({
-        email: user.email,
+        email,
         password: '',
-        name: user.name,
+        name,
         hasEmailVerified: true,
         signUpWay: EnumSignUpWay.Google,
       });

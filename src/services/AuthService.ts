@@ -4,7 +4,6 @@ import nodemailer from 'nodemailer';
 import jwt from 'jsonwebtoken';
 import { ILocalAuthRequest } from '../models/ILocalAuthRequest';
 import { ISignUpRequest } from '../models/ISignUpRequest';
-import IUser from '../models/IUser';
 import UserRepository from '../repositories/UserRepository';
 import ApiResponseError from '../models/ApiResponseError';
 import EnumResponseError from '../models/enums/EnumResponseError';
@@ -25,8 +24,8 @@ export default class AuthService {
     return token;
   }
 
-  async loginFromGoogleAuth(user: IUser): Promise<string> {
-    const userFromDb = await this.userRepository.getUserProfile(user.email) ?? await this.userRepository.createUserFromGoogleAuth(user);
+  async loginFromGoogleAuth(email: string, name: string): Promise<string> {
+    const userFromDb = await this.userRepository.getUserProfile(email) ?? await this.userRepository.createUserFromGoogleAuth(email, name);
     const token = this.generateJwt(userFromDb);
     await this.loginLogRepository.addLoginLog(userFromDb.email);
     return token;
@@ -94,8 +93,8 @@ export default class AuthService {
     }
   }
 
-  async verifyEmail(token: string): Promise<ILoginResponse> {
-    const result = this.decodeJwt(token);
+  async verifyEmail(verifyEmailToken: string): Promise<ILoginResponse> {
+    const result = this.decodeJwt(verifyEmailToken);
 
     if (result) {
       const [rowsUpdated, updatedUser] = await this.userRepository.emailVerifiedSuccess(result.email);
@@ -109,8 +108,8 @@ export default class AuthService {
         token,
         ...updatedUser.Interface,
       };
-    } else {
-      throw new ApiResponseError(EnumResponseError.PleaseSignUpFirst);
     }
+
+    throw new ApiResponseError(EnumResponseError.PleaseSignUpFirst);
   }
 }

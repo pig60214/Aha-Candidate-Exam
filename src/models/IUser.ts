@@ -13,6 +13,7 @@ export default interface IUser {
   email: string,
   name: string,
   hasEmailVerified: boolean,
+  signUpWay: EnumSignUpWay,
 }
 
 @Table
@@ -44,6 +45,7 @@ export class User extends Model implements IUser {
       email: this.email,
       name: this.name,
       hasEmailVerified: this.hasEmailVerified,
+      signUpWay: this.signUpWay,
     };
   }
 }
