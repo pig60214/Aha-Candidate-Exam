@@ -94,13 +94,21 @@ export default class AuthService {
     }
   }
 
-  async verifyEmail(token: string) {
+  async verifyEmail(token: string): Promise<ILoginResponse> {
     const result = this.decodeJwt(token);
+
     if (result) {
-      const rowsUpdated = await this.userRepository.emailVerifiedSuccess(result.email);
+      const [rowsUpdated, updatedUser] = await this.userRepository.emailVerifiedSuccess(result.email);
       if (rowsUpdated === 0) {
         throw new ApiResponseError(EnumResponseError.PleaseSignUpFirst);
       }
+
+      const token = this.generateJwt(updatedUser.Interface);
+      await this.loginLogRepository.addLoginLog(updatedUser.email);
+      return {
+        token,
+        ...updatedUser.Interface,
+      };
     } else {
       throw new ApiResponseError(EnumResponseError.PleaseSignUpFirst);
     }

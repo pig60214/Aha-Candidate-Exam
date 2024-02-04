@@ -71,13 +71,13 @@ export default class UserRepository {
     }
   };
 
-  emailVerifiedSuccess = async (email: string): Promise<number> => {
+  emailVerifiedSuccess = async (email: string): Promise<[number, User]> => {
     try {
-      const [rowsUpdated] = await User.update(
+      const [rowsUpdated, [updatedUser]] = await User.update(
         { hasEmailVerified: true },
-        { where: { email } },
+        { where: { email }, returning: true },
       );
-      return rowsUpdated;
+      return [rowsUpdated, updatedUser];
     } catch (error) {
       console.error(error);
       throw new ApiResponseError(EnumResponseError.InternalError);

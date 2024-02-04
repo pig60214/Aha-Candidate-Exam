@@ -71,9 +71,9 @@ export class AuthController extends Controller {
 
   @Get('/verify-email/{token}')
   public async verifyEmail(@Request() request: express.Request, token: string) {
-    await this.authService.verifyEmail(token);
+    const result = await this.authService.verifyEmail(token);
     this.setStatus(302);
     const response = (<any>request).res as express.Response;
-    response.redirect('https://ahacandidateexam.retool.com/app/login');
+    response.redirect(`https://ahacandidateexam.retool.com/app/after-verify-email?data=${encodeURIComponent(JSON.stringify(result))}`);
   }
 }
