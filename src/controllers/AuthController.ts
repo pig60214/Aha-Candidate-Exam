@@ -34,7 +34,7 @@ export class AuthController extends Controller {
     const token = await this.authService.loginFromGoogleAuth(email, name);
     this.setStatus(302);
     const response = (<any>request).res as express.Response;
-    response.redirect(`https://ahacandidateexam.retool.com/app/google-auth-callback?jwt=${token}`);
+    response.redirect(`https://ahacandidateexam.retool.com/p/google-auth-callback?jwt=${token}`);
   }
 
   @Post('login')
@@ -70,6 +70,6 @@ export class AuthController extends Controller {
     const result = await this.authService.verifyEmail(token);
     this.setStatus(302);
     const response = (<any>request).res as express.Response;
-    response.redirect(`https://ahacandidateexam.retool.com/app/after-verify-email?data=${encodeURIComponent(JSON.stringify(result))}`);
+    response.redirect(`https://ahacandidateexam.retool.com/p/after-verify-email?data=${encodeURIComponent(JSON.stringify(result))}`);
   }
 }
