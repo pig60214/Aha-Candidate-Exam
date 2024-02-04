@@ -5,7 +5,6 @@ import express, {
   Request as ExRequest,
   NextFunction,
 } from 'express';
-import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import passport from 'passport';
 import { RegisterRoutes } from './routes/routes';
@@ -27,7 +26,6 @@ try {
 
 const app: Express = express();
 app.use(express.json());
-app.use(cors());
 
 const router = Router();
 RegisterRoutes(router);
