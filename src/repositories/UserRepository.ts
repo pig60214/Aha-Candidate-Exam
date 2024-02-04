@@ -100,7 +100,7 @@ export default class UserRepository {
 
   login = async (request: ILocalAuthRequest): Promise<User | null> => {
     try {
-      const user = await User.findOne({ where: { email: request.email, signUpWay: EnumSignUpWay.Local } });
+      const user = await User.findOne({ where: { email: request.email } });
       return user;
     } catch (error) {
       console.error(error);

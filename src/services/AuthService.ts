@@ -10,6 +10,7 @@ import ApiResponseError from '../models/ApiResponseError';
 import EnumResponseError from '../models/enums/EnumResponseError';
 import { ILoginResponse } from '../models/ILoginResponse';
 import LoginLogRepository from '../repositories/LoginLogRepository';
+import EnumSignUpWay from '../models/enums/EnumSignUpWay';
 
 dotenv.config();
 export default class AuthService {
@@ -35,6 +36,8 @@ export default class AuthService {
     const user = await this.userRepository.login(request);
     if (!user) {
       throw new ApiResponseError(EnumResponseError.PleaseSignUpFirst);
+    } else if (user.signUpWay !== EnumSignUpWay.Local) {
+      throw new ApiResponseError(EnumResponseError.PleaseLoginWithGoogle);
     } else if (user.password !== request.password) {
       throw new ApiResponseError(EnumResponseError.WrongPassword);
     }
