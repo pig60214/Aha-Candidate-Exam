@@ -1,19 +1,28 @@
 import 'jest';
 import AuthService from '../../src/services/AuthService';
 import UserRepository from '../../src/repositories/UserRepository';
+import LoginLogRepository from '../../src/repositories/LoginLogRepository';
 
 describe('AuthService', () => {
-  it('create user and send email verification', async () => {
-    const userRepository = new UserRepository();
-    const mockCreateUser = jest.spyOn(userRepository, 'createUser').mockResolvedValueOnce({
+  let loginLogRepository = new LoginLogRepository();
+  let userRepository = new UserRepository();
+  let authService = new AuthService(userRepository, loginLogRepository);
+
+  beforeEach(() => {
+    loginLogRepository = new LoginLogRepository();
+    userRepository = new UserRepository();
+    authService = new AuthService(userRepository, loginLogRepository);
+  });
+
+  it('[createUser] create user and send email verification', async () => {
+    const mockCreateUser = jest.spyOn(userRepository, 'createUser').mockResolvedValue({
       email: 'test@test.com',
       name: 'test',
       hasEmailVerified: false,
       signUpWay: 1,
     });
 
-    const authService = new AuthService(userRepository);
-    const mockSendEmailVerification = jest.spyOn(authService, 'sendEmailVerification').mockImplementationOnce(jest.fn());
+    const mockSendEmailVerification = jest.spyOn(authService, 'sendEmailVerification').mockImplementation(jest.fn());
 
     const signUpInfo = {
       email: 'test@test.com',
