@@ -39,7 +39,6 @@ export class AuthController extends Controller {
     const token = await this.authService.loginFromGoogleAuth(email, name);
     this.setStatus(302);
     const response = (<any>request).res as express.Response;
-    console.info(`https://ahacandidateexam.retool.com/p/google-auth-callback?jwt=${token}`);
     response.redirect(`https://ahacandidateexam.retool.com/p/google-auth-callback?jwt=${token}`);
   }
 
