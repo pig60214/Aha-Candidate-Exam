@@ -55,7 +55,7 @@ export default class UserRepository {
     }
   }
 
-  createUser = async (request: ISignUpRequest): Promise<IUser> => {
+  async createUser(request: ISignUpRequest): Promise<IUser> {
     try {
       const user = User.build({ email: request.email, password: request.password, signUpWay: EnumSignUpWay.Local });
       await user.save();
@@ -69,7 +69,7 @@ export default class UserRepository {
       console.error(error);
       throw new ApiResponseError(EnumResponseError.InternalError);
     }
-  };
+  }
 
   emailVerifiedSuccess = async (email: string): Promise<[number, User]> => {
     try {

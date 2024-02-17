@@ -13,9 +13,14 @@ import EnumSignUpWay from '../models/enums/EnumSignUpWay';
 
 dotenv.config();
 export default class AuthService {
-  private userRepository = new UserRepository();
+  private userRepository;
 
-  private loginLogRepository = new LoginLogRepository();
+  private loginLogRepository;
+
+  constructor(userRepository?: UserRepository, loginLogRepository?: LoginLogRepository) {
+    this.userRepository = userRepository ?? new UserRepository();
+    this.loginLogRepository = loginLogRepository ?? new LoginLogRepository();
+  }
 
   async createUser(request: ISignUpRequest): Promise<string> {
     const user = await this.userRepository.createUser(request);
