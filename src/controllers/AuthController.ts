@@ -44,6 +44,9 @@ export class AuthController extends Controller {
     return token;
   }
 
+  /**
+   * Sign up a new user
+   */
   @Post('sign-up')
   public async SignUp(@Body() request: ISignUpRequest): Promise<string> {
     const requestInstance = new SignUpRequest(request);

@@ -3,8 +3,19 @@ import IRequest from './IRequest';
 import EnumResponseError from './enums/EnumResponseError';
 
 export interface ISignUpRequest {
+  /**
+   * As user account, and should be unique
+   */
   email: string;
+
+  /**
+   * Rules: at least one lower character, one upper character, one digit character, one special character and 8 characters
+   */
   password: string;
+
+  /**
+   * Should be same as password
+   */
   confirmPassword: string;
 }
 
