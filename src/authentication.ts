@@ -15,6 +15,9 @@ export function expressAuthentication(
       if (err) {
         reject(new ApiResponseError(EnumResponseError.PleaseLoginFirst));
       } else {
+        if (!decoded.hasEmailVerified) {
+          reject(new ApiResponseError(EnumResponseError.PleaseVerifyEmailFirst));
+        }
         resolve(decoded);
       }
     });

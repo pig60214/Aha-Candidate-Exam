@@ -15,6 +15,7 @@ enum EnumResponseError {
   WrongPassword,
   OldPasswordIsWrong,
   PleaseLoginWithGoogle,
+  PleaseVerifyEmailFirst,
 }
 
 export default EnumResponseError;
