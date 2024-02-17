@@ -18,6 +18,9 @@ import ApiResponse from '../models/ApiResponse';
 export class UserController extends Controller {
   private userService = new UserService();
 
+  /**
+   * Get user profile. If get http 401, means this user hasn't logined.
+   */
   @Get('/get-profile')
   public async getUserProfile(@Request() request: express.Request): Promise<IUser> {
     const userFromToken = request.user as IUser;
