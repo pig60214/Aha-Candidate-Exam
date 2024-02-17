@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "npm run swagger && npx tsc && npm run copy-swagger-ui",
-    "dev": "npx tsc --watch & nodemon -q dist/src/index.js",
+    "dev": "concurrently \"nodemon -q\" \"nodemon -q --config nodemon-swagger.json\"",
     "swagger": "tsoa spec-and-routes",
     "copy-swagger-ui": "cp -r ./node_modules/swagger-ui-dist ./dist/src/swagger-ui-dist",
     "eslint": "npx eslint ./src --ext .js,.jsx,.ts,.tsx",
@@ -45,12 +45,14 @@
     "@types/swagger-ui-express": "^4.1.6",
     "@typescript-eslint/eslint-plugin": "^6.19.1",
     "@typescript-eslint/parser": "^6.19.1",
+    "concurrently": "^8.2.2",
     "eslint-config-airbnb-typescript": "^17.1.0",
     "jest": "^29.7.0",
     "nodemon": "^3.0.1",
     "pg-hstore": "^2.3.4",
     "supertest": "^6.3.4",
     "ts-jest": "^29.1.2",
+    "ts-node": "^10.9.2",
     "typescript": "^5.2.2"
   }
 }
