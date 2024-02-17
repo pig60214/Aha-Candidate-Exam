@@ -16,14 +16,14 @@ export class UpdatePasswordRequest implements IUpdatePasswordRequest {
 
   validatation: EnumResponseError;
 
-  validateFormat = () => {
+  validateFormat() {
     if (this.password === this.oldPassword) {
       this.validatation = EnumResponseError.NewPasswordShouldBeNotSameAsOldPassword;
       return;
     }
 
     this.validatation = validationHelper.isValidPassword(this.password, this.confirmPassword);
-  };
+  }
 
   constructor(request: IUpdatePasswordRequest) {
     this.oldPassword = request.oldPassword;

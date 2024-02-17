@@ -71,7 +71,7 @@ export default class UserRepository {
     }
   }
 
-  emailVerifiedSuccess = async (email: string): Promise<[number, User]> => {
+  async emailVerifiedSuccess(email: string): Promise<[number, User]> {
     try {
       const [rowsUpdated, [updatedUser]] = await User.update(
         { hasEmailVerified: true },
@@ -82,9 +82,9 @@ export default class UserRepository {
       console.error(error);
       throw new ApiResponseError(EnumResponseError.InternalError);
     }
-  };
+  }
 
-  getUserProfile = async (email: string): Promise<IUser | null> => {
+  async getUserProfile(email: string): Promise<IUser | null> {
     try {
       const user = await User.findOne({ where: { email } });
       if (user) {
@@ -96,9 +96,9 @@ export default class UserRepository {
       throw new ApiResponseError(EnumResponseError.InternalError);
     }
     return null;
-  };
+  }
 
-  login = async (request: ILocalAuthRequest): Promise<User | null> => {
+  async login(request: ILocalAuthRequest): Promise<User | null> {
     try {
       const user = await User.findOne({ where: { email: request.email } });
       return user;
@@ -106,5 +106,5 @@ export default class UserRepository {
       console.error(error);
       throw new ApiResponseError(EnumResponseError.InternalError);
     }
-  };
+  }
 }

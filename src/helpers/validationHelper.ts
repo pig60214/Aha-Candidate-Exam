@@ -1,7 +1,7 @@
 import EnumResponseError from '../models/enums/EnumResponseError';
 
 const validationHelper = {
-  isValidPassword: (password: string, confirmPassword: string): EnumResponseError => {
+  isValidPassword(password: string, confirmPassword: string): EnumResponseError {
     if (password !== confirmPassword) {
       return EnumResponseError.PasswordAndConfirmPasswordShouldBeSame;
     }
@@ -28,7 +28,7 @@ const validationHelper = {
 
     return EnumResponseError.Success;
   },
-  isValidEmail: (email: string): EnumResponseError => {
+  isValidEmail(email: string): EnumResponseError {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return EnumResponseError.EmailFormatWrong;
     }
