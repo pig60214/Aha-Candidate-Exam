@@ -10,11 +10,13 @@ export interface ISignUpRequest {
 
   /**
    * Rules: at least one lower character, one upper character, one digit character, one special character and 8 characters
+   * @example "A1@aaaaa"
    */
   password: string;
 
   /**
    * Should be same as password
+   * @example "A1@aaaaa"
    */
   confirmPassword: string;
 }

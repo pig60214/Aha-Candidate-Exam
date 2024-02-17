@@ -20,6 +20,11 @@ import { ILoginResponse } from '../models/ILoginResponse';
 export class AuthController extends Controller {
   private authService = new AuthService();
 
+  /**
+   * sign-up/in by google auth, and then redirect to retool google-auth-callback page with token<br>
+   * redirect to: https://ahacandidateexam.retool.com/p/google-auth-callback?jwt={token}<br>
+   * token: Put in request header. header['authorization'] = 'bearer ${token}'
+   */
   @Get('/google')
   @Middlewares(GoogleAuthMiddleware.Login)
   public googleAuth(): void {}
@@ -44,9 +49,6 @@ export class AuthController extends Controller {
     return token;
   }
 
-  /**
-   * Sign up a new user
-   */
   @Post('sign-up')
   public async SignUp(@Body() request: ISignUpRequest) {
     const requestInstance = new SignUpRequest(request);
@@ -57,6 +59,10 @@ export class AuthController extends Controller {
     await this.authService.createUser(request);
   }
 
+  /**
+   * Send a email verification to the email
+   * @param email send verification to this email
+   */
   @Get('/send-email-verification/{email}')
   public async sendEmailVerification(email: string): Promise<ApiResponse> {
     const validatation = validationHelper.isValidEmail(email);
@@ -68,6 +74,12 @@ export class AuthController extends Controller {
     return new ApiResponse();
   }
 
+  /**
+   * Verify a email address by token, and then redirect to retool after-verify-email page.<br>
+   * redirect to: https://ahacandidateexam.retool.com/p/after-verify-email?data={data}<br>
+   * data: ILoginResponse
+   * @param token generated in /auth/send-email-verification api
+   */
   @Get('/verify-email/{token}')
   public async verifyEmail(@Request() request: express.Request, token: string) {
     const result = await this.authService.verifyEmail(token);

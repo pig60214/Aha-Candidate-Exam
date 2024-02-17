@@ -11,8 +11,17 @@ import EnumSignUpWay from './enums/EnumSignUpWay';
 
 export default interface IUser {
   email: string,
+  /**
+   * If google auth, default value is google account name. If local auth, default value is empty string.
+   */
   name: string,
+  /**
+   * Has this user passed email verification?
+   */
   hasEmailVerified: boolean,
+  /**
+   * There are two sign-up way. 1: local auth, 2: google auth
+   */
   signUpWay: EnumSignUpWay,
 }
 
