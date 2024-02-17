@@ -22,11 +22,9 @@ export default class AuthService {
     this.loginLogRepository = loginLogRepository ?? new LoginLogRepository();
   }
 
-  async createUser(request: ISignUpRequest): Promise<string> {
-    const user = await this.userRepository.createUser(request);
+  async createUser(request: ISignUpRequest) {
+    await this.userRepository.createUser(request);
     await this.sendEmailVerification(request.email);
-    const token = this.generateJwt(user);
-    return token;
   }
 
   async loginFromGoogleAuth(email: string, name: string): Promise<string> {

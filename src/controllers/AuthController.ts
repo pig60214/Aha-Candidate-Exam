@@ -48,14 +48,13 @@ export class AuthController extends Controller {
    * Sign up a new user
    */
   @Post('sign-up')
-  public async SignUp(@Body() request: ISignUpRequest): Promise<string> {
+  public async SignUp(@Body() request: ISignUpRequest) {
     const requestInstance = new SignUpRequest(request);
     if (requestInstance.validatation !== EnumResponseError.Success) {
       throw new ApiResponseError(requestInstance.validatation);
     }
 
-    const token = await this.authService.createUser(request);
-    return token;
+    await this.authService.createUser(request);
   }
 
   @Get('/send-email-verification/{email}')
